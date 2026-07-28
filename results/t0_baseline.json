@@ -1,0 +1,33 @@
+{
+  "t0_sha": "d9dfa4eb7acde0d7ca4497f6014371c0f5ae847d",
+  "t0_commit_date": "2025-06-02T02:04:00+00:00",
+  "doc_count": 3651,
+  "chunk_count": 33286,
+  "pgvector": {
+    "engine": "pgvector",
+    "count": 33286,
+    "n_live_tup": 33286,
+    "n_dead_tup": 0
+  },
+  "qdrant": {
+    "engine": "qdrant",
+    "points_count": 33286,
+    "indexed_vectors_count": 37058,
+    "segments_count": 7,
+    "status": "green",
+    "optimizer_status": "ok"
+  },
+  "chroma": {
+    "engine": "chroma",
+    "count": 33286,
+    "hnsw_dir_bytes": 4096
+  },
+  "pii_overlay_restructure": {
+    "applied_at": "2026-07-13T16:51:46.705166+00:00",
+    "legacy_doc_id": "synthetic-pii/team-directory",
+    "legacy_chunks_removed": 14,
+    "new_employee_docs_added": 100,
+    "new_employee_chunks_added": 100,
+    "note": "Restructured the synthetic PII overlay from one shared Team Directory doc into 100 separate per-employee docs (synthetic-pii/employee/SYN-XXXX), one chunk each, to give exact employee<->chunk identity for the GDPR erasure demo. See churn/pii_overlay.py."
+  }
+}

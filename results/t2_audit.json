@@ -1,0 +1,329 @@
+{
+  "t0_sha": "d9dfa4eb7acde0d7ca4497f6014371c0f5ae847d",
+  "head_sha": "6a7e263deb491dffe5c490fb2d26a0cbadc431d5",
+  "checks_run": [
+    "staleness",
+    "orphans",
+    "duplicates",
+    "retrievable",
+    "engine_specific"
+  ],
+  "duplicate_method": "cosine",
+  "top_k": [
+    5,
+    10
+  ],
+  "staleness_months_threshold": 6,
+  "scorecard": {
+    "t0_baseline_reference": {
+      "doc_count": 3651,
+      "chunk_count": 33286
+    },
+    "t1_post_churn_reference": {
+      "chunk_count_total_ledger": 287346,
+      "doc_count_live": 3840,
+      "doc_count_deleted": 677,
+      "doc_count_renamed": 585
+    },
+    "engines": {
+      "pgvector": {
+        "chunks_indexed_now": 166947,
+        "stale_chunks": {
+          "count": 116798,
+          "pct": 76.59
+        },
+        "orphaned_chunks": {
+          "count": 131241,
+          "pct": 78.61
+        },
+        "near_duplicate_chunks": {
+          "total_bloat": 127061,
+          "pct": 76.11,
+          "exact_hash_excess": 111758,
+          "cosine_ann_flagged": 15303
+        },
+        "deleted_docs_still_retrievable": {
+          "top5": 0,
+          "top10": 0,
+          "of": 637,
+          "storage_layer_persistence": 0
+        },
+        "erased_synthetic_pii_still_retrievable": {
+          "top5": 0,
+          "top10": 0,
+          "of": 40,
+          "storage_layer_persistence": 0
+        },
+        "engine_specific": {
+          "engine": "pgvector",
+          "vacuum_executed": false,
+          "vacuum_algorithm_note": "pgvector's VACUUM is a documented three-pass algorithm: pass 1 removes deleted heap TIDs and builds a hash table of elements to delete; pass 2 repairs the graph structure by finding new neighbors for elements that have connections to deleted nodes; pass 3 marks elements deleted. Between vacuums, dead tuples can still be walked by HNSW, causing recall loss (documented recall-loss issue #244). Not executed by this audit - see 'vacuum_executed': false below.",
+          "count": 166947,
+          "n_live_tup": 166947,
+          "n_dead_tup": 0,
+          "dead_tuple_ratio": 0.0,
+          "t1_post_churn_n_dead_tup": 254060,
+          "n_dead_tup_delta_vs_t1": -254060,
+          "manual_vacuum_ever_run": false,
+          "autovacuum_count": 3,
+          "last_autovacuum": "2026-07-16T16:37:57.094033+00:00",
+          "autovacuum_note": "manual_vacuum_ever_run=false and autovacuum_count>0 together confirm this audit never manually ran VACUUM, but PostgreSQL's background autovacuum daemon (default settings, no operator action) already reclaimed dead tuples on its own - explains why n_dead_tup no longer matches the t1_post_churn.json baseline even without this audit executing VACUUM."
+        }
+      },
+      "qdrant": {
+        "chunks_indexed_now": 166947,
+        "stale_chunks": {
+          "count": 116798,
+          "pct": 76.59
+        },
+        "orphaned_chunks": {
+          "count": 131241,
+          "pct": 78.61
+        },
+        "near_duplicate_chunks": {
+          "total_bloat": 127448,
+          "pct": 76.34,
+          "exact_hash_excess": 111758,
+          "cosine_ann_flagged": 15690
+        },
+        "deleted_docs_still_retrievable": {
+          "top5": 0,
+          "top10": 0,
+          "of": 637,
+          "storage_layer_persistence": 0
+        },
+        "erased_synthetic_pii_still_retrievable": {
+          "top5": 0,
+          "top10": 0,
+          "of": 40,
+          "storage_layer_persistence": 0
+        },
+        "engine_specific": {
+          "engine": "qdrant",
+          "points_count": 166947,
+          "indexed_vectors_count": 193378,
+          "segments_count": 7,
+          "status": "green",
+          "optimizer_status": "ok",
+          "deleted_threshold": 0.2,
+          "vacuum_min_vector_number": 1000,
+          "ledger_expected_absent_count": 218160,
+          "note": "deleted_threshold/vacuum_min_vector_number are collection-level optimizer settings, not a live per-segment deleted-fraction reading - this is a proxy for 'has the threshold likely been crossed somewhere,' not a direct per-segment measurement."
+        }
+      },
+      "chroma": {
+        "chunks_indexed_now": 166947,
+        "stale_chunks": {
+          "count": 116798,
+          "pct": 76.59
+        },
+        "orphaned_chunks": {
+          "count": 131241,
+          "pct": 78.61
+        },
+        "near_duplicate_chunks": {
+          "total_bloat": 127498,
+          "pct": 76.37,
+          "exact_hash_excess": 111758,
+          "cosine_ann_flagged": 15740
+        },
+        "deleted_docs_still_retrievable": {
+          "top5": 0,
+          "top10": 0,
+          "of": 637,
+          "storage_layer_persistence": 0
+        },
+        "erased_synthetic_pii_still_retrievable": {
+          "top5": 0,
+          "top10": 0,
+          "of": 40,
+          "storage_layer_persistence": 0
+        },
+        "engine_specific": {
+          "engine": "chroma",
+          "count": 166947,
+          "hnsw_dir_bytes": 2117865666,
+          "bytes_per_live_vector": 12685.9,
+          "trend": {
+            "t0_baseline": {
+              "count": 33286,
+              "hnsw_dir_bytes": 4096,
+              "note": "known-invalid - docker-compose.yml volume-mount bug, fixed for this reading"
+            },
+            "t1_post_churn": {
+              "count": 166947,
+              "hnsw_dir_bytes": 4096,
+              "note": "known-invalid - docker-compose.yml volume-mount bug, fixed for this reading"
+            },
+            "t2_audit": {
+              "count": 166947,
+              "hnsw_dir_bytes": 2117865666,
+              "note": "first trustworthy reading post-fix"
+            }
+          }
+        }
+      }
+    }
+  },
+  "chunk_set_union_analysis": {
+    "methodology": {
+      "note": "stale_chunk_ids is a strict SUBSET of orphan_chunk_ids by construction, not coincidence: the staleness check's predicate and the orphan check's 'superseded_live_doc' cause are the literal same boolean expression over the same ledger lineage. This means 'stale_only' reads 0 in every engine below - that is expected, not a bug in this script.",
+      "duplicate_definitions": {
+        "conservative": "Exact-hash excess copies only (one deterministic canonical chunk_id per hash cluster, the rest counted as duplicate). 100% precision by construction; matches the already-published exact_hash_excess_duplicate_count (111,758) exactly. Recommended for headline claims.",
+        "full": "Conservative set plus every chunk_id flagged by the cosine-ANN pass (threshold >= 0.98). The cosine layer has no ledger ground truth - report as an upper bound, not a confirmed count."
+      }
+    },
+    "engines": {
+      "pgvector": {
+        "live_total": 166947,
+        "duplicate_definition_conservative": "exact_hash_excess_only",
+        "duplicate_definition_full": "exact_hash_excess_plus_cosine_ann_flagged",
+        "cosine_ann_additional_chunk_ids_count": 18076,
+        "union_conservative_exact_hash_only": {
+          "set_sizes": {
+            "stale": 116798,
+            "orphaned": 131241,
+            "duplicate": 111758
+          },
+          "union_count": 149800,
+          "union_pct": 89.73,
+          "venn_7region": {
+            "stale_only": 0,
+            "orphan_only": 5901,
+            "dup_only": 18559,
+            "stale_and_orphan_only": 32141,
+            "stale_and_dup_only": 0,
+            "orphan_and_dup_only": 8542,
+            "all_three": 84657
+          },
+          "passes_all_checks": {
+            "count": 17147,
+            "pct": 10.27
+          }
+        },
+        "union_full_with_cosine_ann": {
+          "set_sizes": {
+            "stale": 116798,
+            "orphaned": 131241,
+            "duplicate": 121956
+          },
+          "union_count": 152418,
+          "union_pct": 91.3,
+          "venn_7region": {
+            "stale_only": 0,
+            "orphan_only": 4436,
+            "dup_only": 21177,
+            "stale_and_orphan_only": 26026,
+            "stale_and_dup_only": 0,
+            "orphan_and_dup_only": 10007,
+            "all_three": 90772
+          },
+          "passes_all_checks": {
+            "count": 14529,
+            "pct": 8.7
+          }
+        }
+      },
+      "qdrant": {
+        "live_total": 166947,
+        "duplicate_definition_conservative": "exact_hash_excess_only",
+        "duplicate_definition_full": "exact_hash_excess_plus_cosine_ann_flagged",
+        "cosine_ann_additional_chunk_ids_count": 18422,
+        "union_conservative_exact_hash_only": {
+          "set_sizes": {
+            "stale": 116798,
+            "orphaned": 131241,
+            "duplicate": 111758
+          },
+          "union_count": 149800,
+          "union_pct": 89.73,
+          "venn_7region": {
+            "stale_only": 0,
+            "orphan_only": 5901,
+            "dup_only": 18559,
+            "stale_and_orphan_only": 32141,
+            "stale_and_dup_only": 0,
+            "orphan_and_dup_only": 8542,
+            "all_three": 84657
+          },
+          "passes_all_checks": {
+            "count": 17147,
+            "pct": 10.27
+          }
+        },
+        "union_full_with_cosine_ann": {
+          "set_sizes": {
+            "stale": 116798,
+            "orphaned": 131241,
+            "duplicate": 122171
+          },
+          "union_count": 152447,
+          "union_pct": 91.31,
+          "venn_7region": {
+            "stale_only": 0,
+            "orphan_only": 4398,
+            "dup_only": 21206,
+            "stale_and_orphan_only": 25878,
+            "stale_and_dup_only": 0,
+            "orphan_and_dup_only": 10045,
+            "all_three": 90920
+          },
+          "passes_all_checks": {
+            "count": 14500,
+            "pct": 8.69
+          }
+        }
+      },
+      "chroma": {
+        "live_total": 166947,
+        "duplicate_definition_conservative": "exact_hash_excess_only",
+        "duplicate_definition_full": "exact_hash_excess_plus_cosine_ann_flagged",
+        "cosine_ann_additional_chunk_ids_count": 18496,
+        "union_conservative_exact_hash_only": {
+          "set_sizes": {
+            "stale": 116798,
+            "orphaned": 131241,
+            "duplicate": 111758
+          },
+          "union_count": 149800,
+          "union_pct": 89.73,
+          "venn_7region": {
+            "stale_only": 0,
+            "orphan_only": 5901,
+            "dup_only": 18559,
+            "stale_and_orphan_only": 32141,
+            "stale_and_dup_only": 0,
+            "orphan_and_dup_only": 8542,
+            "all_three": 84657
+          },
+          "passes_all_checks": {
+            "count": 17147,
+            "pct": 10.27
+          }
+        },
+        "union_full_with_cosine_ann": {
+          "set_sizes": {
+            "stale": 116798,
+            "orphaned": 131241,
+            "duplicate": 122301
+          },
+          "union_count": 152479,
+          "union_pct": 91.33,
+          "venn_7region": {
+            "stale_only": 0,
+            "orphan_only": 4384,
+            "dup_only": 21238,
+            "stale_and_orphan_only": 25794,
+            "stale_and_dup_only": 0,
+            "orphan_and_dup_only": 10059,
+            "all_three": 91004
+          },
+          "passes_all_checks": {
+            "count": 14468,
+            "pct": 8.67
+          }
+        }
+      }
+    }
+  }
+}
