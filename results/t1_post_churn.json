@@ -1,0 +1,56 @@
+{
+  "t0_sha": "d9dfa4eb7acde0d7ca4497f6014371c0f5ae847d",
+  "t0_commit_date": "2025-06-02T02:04:00+00:00",
+  "head_sha": "6a7e263deb491dffe5c490fb2d26a0cbadc431d5",
+  "head_commit_date": "2026-07-10T17:26:48-07:00",
+  "commits_walked": 4742,
+  "reingest_commit_sha": "58c4d5419b7000da39686ce74a3eec495dd384ec",
+  "reingest_commit_date": "2025-12-22T09:08:53+11:00",
+  "erasure_commit_sha": "79b21e996dc8e22fff5585a9e4c2563ad10debf5",
+  "erasure_commit_date": "2026-05-11T21:43:34+00:00",
+  "doc_count_live": 3840,
+  "doc_count_deleted": 677,
+  "doc_count_renamed": 585,
+  "chunk_count_total_ledger": 287346,
+  "churn_counters": {
+    "update_correct": 4821,
+    "update_buggy": 4530,
+    "add": 851,
+    "delete": 649,
+    "add_from_stub": 27,
+    "rename_correct": 298,
+    "rename_buggy": 288,
+    "rename_degraded_to_add": 33,
+    "reingest_duplicate_chunks": 33480,
+    "pii_erasure_employee_count": 40
+  },
+  "index_events_written": {
+    "pgvector": 505506,
+    "qdrant": 505506,
+    "chroma": 505506
+  },
+  "erasure_requests_written": 120,
+  "pii_overlay_restructure": {
+    "skipped": true,
+    "reason": "already migrated"
+  },
+  "pgvector": {
+    "engine": "pgvector",
+    "count": 166947,
+    "n_live_tup": 166850,
+    "n_dead_tup": 254060
+  },
+  "qdrant": {
+    "engine": "qdrant",
+    "points_count": 166947,
+    "indexed_vectors_count": 193378,
+    "segments_count": 7,
+    "status": "green",
+    "optimizer_status": "ok"
+  },
+  "chroma": {
+    "engine": "chroma",
+    "count": 166947,
+    "hnsw_dir_bytes": 4096
+  }
+}

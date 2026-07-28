@@ -1,0 +1,42 @@
+[project]
+name = "rag-index-decay"
+version = "0.1.0"
+description = "Decayed RAG index teardown: real-git-churn corpus, multi-engine deletion-semantics demo, ground-truth ledger."
+readme = "README.md"
+requires-python = ">=3.12,<3.13"
+license = { text = "Apache-2.0" }
+authors = [
+    { name = "rimironenko", email = "rost@rostcamp.com" },
+]
+dependencies = [
+    # BAAI/bge-m3 is pinned to HF revision 5617a9f61b028005a4858fdac845db406aefb181
+    # (fetched 2026-07-12, latest commit as of that date) in corpus/chunk.py's
+    # MODEL_REVISION constant - no unpinned versions anywhere in this repo.
+    "sentence-transformers==5.6.0",
+    "torch",
+    "numpy",
+    "psycopg[binary]",
+    "qdrant-client==1.15.1",  # matches pinned qdrant server image v1.15.5 (docker-compose.yml)
+    "chromadb==0.6.3",  # matches pinned chroma server image 0.6.3 (docker-compose.yml)
+    "GitPython",
+    "Faker",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "ruff",
+]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+py-modules = ["seeds"]
+packages = ["corpus", "churn", "ledger", "engines"]
+
+[tool.pytest.ini_options]
+markers = [
+    "integration: requires live Docker containers (docker compose up)",
+]
