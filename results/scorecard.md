@@ -3,7 +3,8 @@
 Corpus: GitLab Handbook, T0 commit `d9dfa4eb7a` (2025-06-02) → HEAD `6a7e263deb`
 (2026-07-10), 4,742 first-parent commits walked. Identical embeddings
 (BGE-M3, fp32, seed 42) upserted into pgvector (HNSW/cosine), Qdrant
-(cosine), and Chroma (cosine), all on documented defaults. Full raw data: [`results/t0_baseline.json`](https://github.com/rimironenko/rag-index-decay/blob/main/results/t0_baseline.json), [`results/t1_post_churn.json`](https://github.com/rimironenko/rag-index-decay/blob/main/results/t1_post_churn.json), [`results/t2_audit.json`](https://github.com/rimironenko/rag-index-decay/blob/main/results/t2_audit.json). These files contain counts, percentages and per-engine stats - not chunk-level finding IDs. The chunk-level ground truth lives in the ledger.
+(cosine), and Chroma (cosine), all on documented defaults. Full raw data: [`results/t0_baseline.json`](https://github.com/rimironenko/rag-index-decay/blob/main/results/t0_baseline.json), [`results/t1_post_churn.json`](https://github.com/rimironenko/rag-index-decay/blob/main/results/t1_post_churn.json), [`results/t2_audit.json`](https://github.com/rimironenko/rag-index-decay/blob/main/results/t2_audit.json). These files contain counts, percentages and per-engine stats - not chunk-level finding IDs. The chunk-level ground truth lives in the published ledger
+([`ledger.db.gz`](https://github.com/rimironenko/rag-index-decay/releases/latest)).
 
 | Check | pgvector | Qdrant | Chroma | Ground-truth (ledger) | Audit precision/recall |
 |---|---|---|---|---|---|
@@ -32,8 +33,16 @@ each cluster's one "kept" canonical copy from the ANN candidate pool (to
 avoid re-flagging the same duplicates a second time at cosine=1.0), and
 there are 36,761 such clusters. The reproducible arithmetic is 166,947 - 111,758 (excess duplicates) - 36,761 (kept cluster originals) = 18,428-chunk remainder. Three different counts appear against this remainder in the raw results, and they are not interchangeable: `cosine_ann_flagged` (15,303–15,740) is the number of chunks flagged near-duplicate at >=0.98 and is what's added to exact_hash_excess to produce the total_bloat / ~76% figure reported above. `cosine_ann_additional_chunk_ids_count` (18,076–18,496) is a separate, larger count from an earlier candidate-generation pass and is not used in any headline claim in this scorecard or the blog post. Only `cosine_ann_flagged` should be cited publicly as "near-duplicates found by the ANN pass". The other figure is retained in `t2_audit.json` for audit-methodology review only.
 
-**Index growth:** 33,286 chunks at T0 → 166,947 live at HEAD, a 5.0x
-increase, out of 287,346 chunk rows ever logged across the replay.
+**Index growth:** 33,286 chunks at T0 → 166,947 live at HEAD, a a 5.0x increase (a clean pipeline would hold 35,706 - the corpus itself grew
+7.3%), out of 287,346 chunk rows ever logged across the replay.
+
+**Growth gap = orphan set.** The 131,241 gap between live (166,947) and
+clean-pipeline (35,706) is not just numerically equal to the orphan count -
+it is the same `chunk_id` set, cause for cause (4,723 deleted + 9,720 renamed +
+116,798 superseded), identical on all three engines. Within it, 97,761
+chunks are skip-flagged in the ledger (a delete should have been issued and
+never was - failure modes A/D); the other 33,480 carry no later ledger event
+at all - upserted once, never touched again, source doc moved on afterwards.
 
 **Deleted-doc count note:** the deletion-retrievability check runs against 637 docs (677 total ledger-deleted minus the 40 synthetic-PII erasures, tracked separately). This is lower than `churn_counters.delete` (649) in `t1_post_churn.json`. The 12-doc gap is docs that were deleted and later re-added under `add_from_stub` (27 such events), which nets out differently depending on whether a doc's final state or its total delete events is being counted. The retrievability check uses final state - a doc counts as 'deleted' only if it is absent at HEAD - which is the correct population for a leak check.
 

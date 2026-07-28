@@ -86,7 +86,7 @@ inspectable.
 
 You don't have to trust the private code to check the findings. The
 populated ground-truth ledger is published as a release asset
-([`ledger.db.gz`](https://github.com/rimironenko/rag-index-decay/releases/tag/ledger-db-v1)) - too large for git, but byte-identical to
+([`ledger.db.gz`](https://github.com/rimironenko/rag-index-decay/releases/latest)) - too large for git, but byte-identical to
 what `python -m churn.replay` rebuilds. `index_events` records which chunks
 should be present in which engine after every operation, `erasure_requests`
 records what should be gone after the synthetic-PII erasure step (40
@@ -108,6 +108,12 @@ yourself it would report smaller numbers. That's the subset semantics,
 not a contradiction.
 
 ## Reproduce
+
+If you only want to verify the findings rather than rebuild the index, you
+don't need any of this - download the published ledger
+([`ledger.db.gz`](https://github.com/rimironenko/rag-index-decay/releases/latest))
+and query it directly. The pipeline below is for reproducing the *index
+state* itself.
 
 ```
 python3.12 -m venv .venv
@@ -143,4 +149,8 @@ this exact index state or clarifies the fairness protocol above.
   `https://gitlab.com/gitlab-com/content-sites/handbook.git` at repro time
   (not vendored here) - see "Limitations" above for the attribution source.
 - **`BAAI/bge-m3`** embedding model: MIT.
+- **Ledger release asset (`ledger.db.gz`):** derived metadata only - doc
+  paths, commit SHAs, content hashes (`text_sha256`), token counts and
+  expected-state flags. Contains no handbook text and no synthetic-PII
+  content.
 - **`rag-staleness-check`** OSS CLI: [separate repo](https://github.com/rimironenko/rag-staleness-check), also Apache-2.0.
